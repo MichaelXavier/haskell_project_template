@@ -11,27 +11,16 @@ class HaskellProject < Thor::Group
     self.destination_root = name
   end
 
-  def create_rakefile
+  def create_files
+    copy_file('Gemfile') 
     copy_file('Rakefile') 
-  end
-
-  def create_guardfile
     copy_file('Guardfile') 
-  end
-
-  def create_license
     template("LICENSE.tt")
-  end
-
-  def create_readme
     template("README.md.tt")
   end
 
-  def create_test
+  def create_directories
     directory('test')
-  end
-
-  def create_src
     empty_directory('src')
   end
 
@@ -44,6 +33,12 @@ class HaskellProject < Thor::Group
   def init_sandbox
     inside do
       run("cabal sandbox init")
+    end
+  end
+
+  def bundler
+    inside do
+      run("bundle")
     end
   end
 
