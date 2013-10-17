@@ -1,0 +1,44 @@
+require 'thor'
+require 'date'
+
+class HaskellProject < Thor::Group
+  include Thor::Actions
+
+  argument :name
+  source_root('~/src/mine/haskell_project_template')
+
+  def create_rakefile
+    copy_file('files/Rakefile', "#{name}/Rakefile") 
+  end
+
+  def create_guardfile
+    copy_file('files/Guardfile', "#{name}/Guardfile") 
+  end
+
+  def create_license
+    template("templates/LICENSE", "#{name}/LICENSE")
+  end
+
+  def create_readme
+    template("templates/README.md", "#{name}/README.md")
+  end
+
+  def init_cabal_project
+    inside(name) do
+      run("cabal init --no-comments -l LICENSE -x README.md")
+    end
+  end
+
+  def init_sandbox
+    inside(name) do
+      run("cabal sandbox init")
+    end
+  end
+
+  def git_init
+    inside(name) do
+      run("git init")
+      run("git add -A")
+    end
+  end
+end
