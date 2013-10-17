@@ -5,38 +5,50 @@ class HaskellProject < Thor::Group
   include Thor::Actions
 
   argument :name
-  source_root('~/src/mine/haskell_project_template')
+  source_root '~/src/mine/haskell_project_template/files'
+
+  def setup
+    self.destination_root = name
+  end
 
   def create_rakefile
-    copy_file('files/Rakefile', "#{name}/Rakefile") 
+    copy_file('Rakefile') 
   end
 
   def create_guardfile
-    copy_file('files/Guardfile', "#{name}/Guardfile") 
+    copy_file('Guardfile') 
   end
 
   def create_license
-    template("templates/LICENSE", "#{name}/LICENSE")
+    template("LICENSE.tt")
   end
 
   def create_readme
-    template("templates/README.md", "#{name}/README.md")
+    template("README.md.tt")
+  end
+
+  def create_test
+    directory('test')
+  end
+
+  def create_src
+    empty_directory('src')
   end
 
   def init_cabal_project
-    inside(name) do
+    inside do
       run("cabal init --no-comments -l LICENSE -x README.md")
     end
   end
 
   def init_sandbox
-    inside(name) do
+    inside do
       run("cabal sandbox init")
     end
   end
 
   def git_init
-    inside(name) do
+    inside do
       run("git init")
       run("git add -A")
     end
