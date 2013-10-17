@@ -4,7 +4,7 @@ You'll probably want to remove my hardcoded names/paths from this.
 
 # Installation
 
-thor install haskell_project
+`thor install haskell_project`
 
 # Usage
-thor haskell_project Functorama
+`thor haskell_project Functorama`
